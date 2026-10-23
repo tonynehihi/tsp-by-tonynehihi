@@ -809,14 +809,19 @@ fn run_build(_zip: &std::path::Path, _work: &std::path::Path, _cancel: &AtomicBo
 /// moves the old app out of /Applications into a backup folder (so it cannot be
 /// launched mid-swap), installs the built app and relaunches. Every step logs to
 /// ~/Library/Logs/TSPowerPoint-update.log; a failed install restores the
-/// old app from the backup and reopens it.
+/// old app from the backup and reopens it. Since 1.1.1 the bundle is named
+/// "TS PowerPoint.app" (it was "TsP.app" up to 1.1.0): the installed copy may
+/// still sit at the legacy path, so the script moves that aside the same way
+/// and, after a successful swap, removes any stale old-name copy so
+/// /Applications never holds two of them.
 const SWAP_SCRIPT: &str = r#"#!/bin/sh
 BUILT="$1"
 VER="${2:-unknown}"
 WORK="${3:-}"
-DEST="/Applications/TsP.app"
+DEST="/Applications/TS PowerPoint.app"
+LEGACY="/Applications/TsP.app"
 CACHE_DIR="$HOME/Library/Caches/TS PowerPoint/updates"
-BACKUP="$CACHE_DIR/backup/TsP.app"
+BACKUP="$CACHE_DIR/backup/TS PowerPoint.app"
 LOG_DIR="$HOME/Library/Logs"
 LOG="$LOG_DIR/TSPowerPoint-update.log"
 mkdir -p "$LOG_DIR" "$CACHE_DIR/backup"
@@ -834,7 +839,7 @@ fail() {
   exit 1
 }
 i=0
-while pgrep -f "/TsP.app/Contents/MacOS/TsP" >/dev/null 2>&1; do
+while pgrep -f "Contents/MacOS/TsP" >/dev/null 2>&1; do
   i=$((i+1))
   if [ "$i" -gt 120 ]; then
     echo "The app was still running after 120s - install postponed, nothing changed."
@@ -844,9 +849,17 @@ while pgrep -f "/TsP.app/Contents/MacOS/TsP" >/dev/null 2>&1; do
 done
 [ -d "$BUILT" ] || fail "the built app is missing"
 rm -rf "$BACKUP"
-mv "$DEST" "$BACKUP" || fail "could not move the old app aside"
+if [ -d "$DEST" ]; then
+  mv "$DEST" "$BACKUP" || fail "could not move the old app aside"
+elif [ -d "$LEGACY" ]; then
+  mv "$LEGACY" "$BACKUP" || fail "could not move the old app aside"
+fi
 ditto "$BUILT" "$DEST" || fail "install the new app"
 INSTALLED=1
+if [ -d "$LEGACY" ]; then
+  echo "Removing the stale old-name copy at $LEGACY (the bundle was renamed in 1.1.1)."
+  rm -rf "$LEGACY"
+fi
 echo "=== Update to $VER installed (previous version kept at $BACKUP) ==="
 [ -n "$WORK" ] && rm -rf "$WORK"
 open "$DEST" || fail "relaunch the app"
@@ -1212,7 +1225,16 @@ mod tests {
     fn swap_script_only_swaps_and_restores_on_failure() {
         // The build happens in the app now; the script must not build anything.
         assert!(!SWAP_SCRIPT.contains("package.sh"), "swap script must not build");
-        for needle in ["pgrep -f", "/Applications/TsP.app", "mv \"$DEST\" \"$BACKUP\"", "ditto", "open \"$DEST\""] {
+        for needle in [
+            "pgrep -f",
+            "/Applications/TS PowerPoint.app",
+            "/Applications/TsP.app",
+            "mv \"$DEST\" \"$BACKUP\"",
+            "mv \"$LEGACY\" \"$BACKUP\"",
+            "rm -rf \"$LEGACY\"",
+            "ditto",
+            "open \"$DEST\"",
+        ] {
             assert!(SWAP_SCRIPT.contains(needle), "swap script must contain: {needle}");
         }
     }
@@ -1240,7 +1262,7 @@ mod tests {
     #[test]
     fn build_output_lines_map_to_steps_and_counts() {
         assert_eq!(step_label("==> TS PowerPoint 1.1.0 for macOS (aarch64), identity: -").as_deref(), Some("Preparing the build..."));
-        assert_eq!(step_label("==> assembling /long/path/TsP.app").as_deref(), Some("Assembling the app..."));
+        assert_eq!(step_label("==> assembling /long/path/TS PowerPoint.app").as_deref(), Some("Assembling the app..."));
         assert_eq!(step_label("==> building /long/path/tsp-by-tonynehihi-1.1.0-macos-aarch64.dmg").as_deref(), Some("Building the disk image..."));
         assert_eq!(
             step_label("==> building /long/path/deckcraft-cli-1.1.0-macos-aarch64.zip").as_deref(),

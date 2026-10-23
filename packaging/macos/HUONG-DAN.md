@@ -2,7 +2,7 @@
 
 Bản build cá nhân của Tony, dựa trên DeckCraft (MIT/Apache-2.0) của storytold, đã đổi:
 
-- Tên app là **TS PowerPoint** — ngoài Spotlight / Finder / Dock là **TsP.app**, icon **P cam đỏ PowerPoint** theo ngôn ngữ thiết kế của bộ Tony Suite.
+- Tên app là **TS PowerPoint** — ngoài Spotlight / Finder / Dock là **TS PowerPoint.app**, icon **P cam đỏ PowerPoint** theo ngôn ngữ thiết kế của bộ Tony Suite.
 - **Tự kiểm tra & cài bản mới ngay trong app** (menu Help → Check for Updates), kèm changelog hiện trong app.
 - **Menu Help gọn + bỏ hết link về bản gốc**: không còn link Discord / GitHub ở màn hình bắt đầu, trong Backstage hay trong About; nút "Learn More" trên ribbon và lệnh `links` của bản dòng lệnh cũng đã bỏ.
 
@@ -23,7 +23,7 @@ Thư mục settings và dữ liệu vẫn giữ tên DeckCraft như bản gốc 
 # Xóa bản build cũ
 rm -rf target/
 # Xóa app đã cài (nếu đã kéo vào Applications)
-rm -rf "/Applications/TsP.app"
+rm -rf "/Applications/TS PowerPoint.app"
 rm -rf "/Applications/DeckCraft.app"
 ```
 
@@ -61,7 +61,7 @@ cargo build --release -p deckcraft
 packaging/macos/package.sh --arch aarch64
 ```
 (Máy Intel cũ: `--arch x86_64`.)
-Xong mở file `.dmg` trong `dist/release/`, kéo **TsP.app** vào Applications.
+Xong mở file `.dmg` trong `dist/release/`, kéo **TS PowerPoint.app** vào Applications.
 
 Từ các bản sau, không cần lặp lại các bước này: mở app và dùng **Check for Updates**.
 
@@ -76,7 +76,7 @@ Chuột phải vào app → chọn **Open** → bấm **Open** trong hộp tho�
 1. Mở Terminal.
 2. Gõ đúng dòng này rồi Enter:
 ```bash
-xattr -cr "/Applications/TsP.app"
+xattr -cr "/Applications/TS PowerPoint.app"
 ```
 3. Mở app lại bình thường.
 

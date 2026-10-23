@@ -19,7 +19,7 @@ This repository is **not** the official DeckCraft and is not a public product re
 
 ## What Tony changed
 
-- **Name & identity**: the app is called "TS PowerPoint", with its own **TsP** icon (PowerPoint orange-red, in the Tony Suite design language), About screen and macOS bundle (`TsP.app`).
+- **Name & identity**: the app is called "TS PowerPoint", with its own **TsP** icon (PowerPoint orange-red, in the Tony Suite design language), About screen and macOS bundle (`TS PowerPoint.app`).
 - **Built-in self-update**: the app checks the Releases of this repo for the newest version — once at launch (with the release's changelog on screen when something new exists) and any time from *Help → Check for Updates*. On macOS it then downloads, builds and installs the update by itself; the current version is only swapped out for a few seconds at the very end, and the previous version is kept as a backup.
 - **Clean Help menu**: About TS PowerPoint / Check for Updates / Command Palette — and **no links back to the upstream project anywhere in the app** (no Discord, website or GitHub links on the start screen, in Backstage, in the ribbon or in About; the command-line tool's `links` command is gone too).
 

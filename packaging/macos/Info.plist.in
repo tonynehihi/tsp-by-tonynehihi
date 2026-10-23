@@ -7,9 +7,9 @@
   <key>CFBundleDevelopmentRegion</key>
   <string>en</string>
   <key>CFBundleDisplayName</key>
-  <string>TsP</string>
+  <string>TS PowerPoint</string>
   <key>CFBundleName</key>
-  <string>TsP</string>
+  <string>TS PowerPoint</string>
   <key>CFBundleExecutable</key>
   <string>TsP</string>
   <key>CFBundleIdentifier</key>

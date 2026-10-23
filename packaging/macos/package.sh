@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build, sign and (optionally) notarize the macOS release artifacts:
 #
-#   $DIST/tsp-by-tonynehihi-<version>-macos-<arch>.dmg          TsP.app on a drag-to-Applications DMG
+#   $DIST/tsp-by-tonynehihi-<version>-macos-<arch>.dmg          TS PowerPoint.app on a drag-to-Applications DMG
 #   $DIST/deckcraft-cli-<version>-macos-<arch>.zip      the headless CLI
 #
 # Usage: packaging/macos/package.sh [--arch universal|aarch64|x86_64] [--skip-build]
@@ -39,7 +39,7 @@ export MACOSX_DEPLOYMENT_TARGET=11.0
 IDENTITY="${MACOS_SIGN_IDENTITY:--}"
 SHORT_VERSION="${VERSION%%-*}"
 WORK="$CARGO_TARGET_DIR/macos-package"
-APP="$WORK/TsP.app"
+APP="$WORK/TS PowerPoint.app"
 DMG="$DIST/tsp-by-tonynehihi-$VERSION-macos-$ARCH.dmg"
 CLI_ZIP="$DIST/deckcraft-cli-$VERSION-macos-$ARCH.zip"
 
@@ -97,7 +97,7 @@ notarize() {
   fi
 }
 
-# ---- TsP.app ----------------------------------------------------------------------------
+# ---- TS PowerPoint.app ------------------------------------------------------------------
 echo "==> assembling $APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 # Executable and icon carry the display name (CFBundleExecutable / CFBundleIconFile).
@@ -147,7 +147,7 @@ fi
 echo "==> building $DMG"
 STAGE="$WORK/dmg"
 mkdir -p "$STAGE"
-ditto "$APP" "$STAGE/TsP.app"
+ditto "$APP" "$STAGE/TS PowerPoint.app"
 ln -s /Applications "$STAGE/Applications"
 # Finder window layout: background, icon size and positions (packaging/macos/dmg/README.md).
 mkdir -p "$STAGE/.background"

@@ -1,5 +1,11 @@
 # Changelog
 
+## TS PowerPoint 1.1.1
+
+- **RENAMED APP BUNDLE**: the macOS app bundle is now **TS PowerPoint.app** (it was TsP.app), so Spotlight finds the app when you search "PowerPoint". The bundle id, documents, settings and data folders are unchanged — everything keeps working exactly as before, and the built-in updater handles the rename by itself.
+
+— tonynehihi
+
 ## TS PowerPoint 1.1.0
 
 First release of TS PowerPoint, a personal build based on DeckCraft 0.9.0 by storytold.
